@@ -1,19 +1,19 @@
 {
   "client": {
-    "address": "192.168.137.133",
+    "address": "127.0.0.1",
     "port": 5555,
     "delay_resend": 1000
   },
   "receive_http_data": {
-    "enabled": true,
-    "address": "192.168.137.121",
+    "enabled": false,
+    "address": "127.0.0.1",
     "port": 3030,
     "serial": "/dev/ttyUSB0",
     "baudrate": 115200,
     "delay_receipt": 1000
   },
   "opencv": {
-    "enabled": false,
+    "enabled": true,
     "limit_cameras": 4,
     "image_format": "png"
   },
@@ -60,7 +60,7 @@
     }
   ],
   "security": {
-    "name": "block_left_1",
-    "token": "hsjsfdhnsdnbsdjdsh"
+    "name": "block_test_1",
+    "token": "your-token"
   }
 }
