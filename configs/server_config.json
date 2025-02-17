@@ -1,0 +1,51 @@
+{
+	"server": {
+		"address": "192.168.218.86",
+		"port": 5555
+	},
+	"settings": {
+		"multi_client": {
+			"enabled": true,
+			"blocks": [
+				{
+					"enabled": false,
+					"name": "block_center_1",
+					"directory": {
+						"logger": "logger/block_center_1",
+						"image": "image/block_center_1"
+					},
+					"security": {
+						"token": "hsjsfdhnsdnbsdjdsh",
+						"enabled_ip_check": false,
+						"allowed_ips": [ "localhost" ]
+					},
+					"permissions": {
+						"allowed_types": [ "sensor" ]
+					}
+				},
+				{
+					"enabled": true,
+					"name": "block_left_1",
+					"directory": {
+						"logger": "logger/block_left_1",
+						"image": "image/block_left_1"
+					},
+					"security": {
+						"token": "hsjsfdhnsdnbsdjdsh",
+						"enabled_ip_check": false,
+						"allowed_ips": [ "localhost", "127.0.0.1", "192.168.1.105" ]
+					},
+					"permissions": {
+						"allowed_types": [ "sensor", "image" ]
+					}
+				}
+			],
+			"create_directory_if_missing": true,
+			"timestamp_filename": true
+		},
+		"formatting": {
+			"date_format": "%d_%m_%Y",
+			"time_format": "%H_%M_%S"
+		}
+	}
+}
