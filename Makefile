@@ -4,7 +4,7 @@ CXXFLAGS = -std=c++17 -Wall -Iinclude
 
 # Путь к библиотекам и OpenCV
 INCLUDES = -I./include -I/usr/include/opencv4
-LIBS = -lpthread -lwiringPi -L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lcurl -lzip -lnlohmann_json
+LIBS = -lpthread -lwiringPi -L/usr/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lcurl -lzip
 
 # Директории
 BUILD_DIR = build
