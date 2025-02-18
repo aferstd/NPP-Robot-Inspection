@@ -1,9 +1,9 @@
 {
-    "repository_url": "https://www.dropbox.com/scl/fi/gsvuaw4fw58im8jh29gwk/update.zip?rlkey=a1u2iliiscnokiy9zyn132o6s&st=t6rrkesa&dl=1",
-    "files_to_move": [
-	    "client",
-	    "client_config.json",
-        "server",
-        "server_config.json"
-    ]
+  "repository_url": "used-dropbox-&dl=1",
+  "files_to_move": [
+    "client",
+    "client_config.json",
+    "server",
+    "server_config.json"
+  ]
 }
