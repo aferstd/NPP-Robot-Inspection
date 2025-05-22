@@ -174,3 +174,107 @@
   "step_size": 0 # размер шага двигателей лучше ставить 600 можно и выше или ниже смотря сколько поставить!
 }
 ```
+
+### Четвёртый способ если код на Arduino не работает или его нужно изменить!
+1. На рабочем столе откройте Arduino IDE
+2. Введите код и отредактируейте его ДАЖЕ С КОМЕНТАРИЯМИ он будет работать (коментарии кода начинаются после //)
+   ```
+	#include <Servo.h>
+	#include <ArduinoJson.h>
+	
+	// Пины для шаговых двигателей 
+	#define NUM_MOTORS 4
+	const int stepPins[NUM_MOTORS] = {2, 3, 4, 12}; // Шаговые двигатели
+	const int dirPins[NUM_MOTORS] = {5, 6, 7, 13};  // Направление двигателей
+	
+	// Пины для серводвигателей 
+	#define NUM_SERVOS 2
+	const int servoPins[NUM_SERVOS] = {A4, A5}; // Серводвигатели 
+	
+	Servo servos[NUM_SERVOS]; // Массив сервоприводов
+	
+	bool unblock_motors = false; 
+	
+	void setup() { 
+	  Serial.begin(9600);  // Убедитесь, что скорость совпадает с Orange Pi 
+	
+	  pinMode(8, OUTPUT);
+	  digitalWrite(8, LOW);
+	
+	  // Подключаем сервоприводы
+	  for (int i = 0; i < NUM_SERVOS; i++)
+	    servos[i].attach(servoPins[i]);
+	
+	  // Устанавливаем режимы для всех пинов шаговых двигателей
+	  for (int i = 0; i < NUM_MOTORS; i++) {
+	    pinMode(stepPins[i], OUTPUT);
+	    pinMode(dirPins[i], OUTPUT);
+	  } 
+	} 
+	
+	void loop() { 
+	  if (Serial.available() > 0) { 
+	    String receivedData = Serial.readStringUntil('}');
+	    receivedData += '}';
+	
+	    // Создаем объект JSON
+	    StaticJsonDocument<200> doc; // Размер документа подберите в зависимости от ваших данных
+	    DeserializationError error = deserializeJson(doc, receivedData);
+	
+	    // Проверяем на наличие ошибок
+	    if (error) {
+	      Serial.print(F("Ошибка разбора JSON: "));
+	      Serial.println(error.f_str());
+	      return;
+	    }
+	
+	    // Извлекаем значения из JSON
+	    // const char* mode = doc["mode"];
+	    int motorDirection = doc["motor_direction"];
+	    int servo1Position = doc["servo1_position"];
+	    int servo2Position = doc["servo2_position"];
+	    int stepSize = doc["step_size"];
+	
+	    // Устанавливаем позиции сервоприводов
+	    servos[0].write(servo1Position); 
+	    servos[1].write(servo2Position); 
+	
+	    // Управляем направлением моторов
+	    unblock_motors = (motorDirection == 1 || motorDirection == 2);
+	
+	    digitalWrite(dirPins[0], (motorDirection == 1) ? HIGH : LOW); // Назад или Вперед
+	    digitalWrite(dirPins[1], (motorDirection == 1) ? LOW : HIGH); // Назад или Вперед
+	    digitalWrite(dirPins[2], (motorDirection == 1) ? HIGH : LOW); // Назад или Вперед
+	    digitalWrite(dirPins[3], (motorDirection == 1) ? LOW : HIGH); // Назад или Вперед
+	
+	    // Шаговые двигатели 
+	    if (unblock_motors) { 
+	      for (int i = 0; i < stepSize; i++) { 
+	        for (int j = 0; j < NUM_MOTORS; j++)
+	          digitalWrite(stepPins[j], HIGH);  // Шаг 
+	        delayMicroseconds(1000);             
+	        for (int j = 0; j < NUM_MOTORS; j++)
+	          digitalWrite(stepPins[j], LOW);   
+	        delayMicroseconds(1000);             
+	      } 
+	    } 
+	
+	    // Выводим данные в Serial Monitor 
+	    Serial.print("Servo 1 Position: "); 
+	    Serial.println(servo1Position); 
+	    Serial.print("Servo 2 Position: "); 
+	    Serial.println(servo2Position); 
+	    Serial.print("Motor Direction: "); 
+	    Serial.println(motorDirection); 
+	    Serial.print("Step Size: "); 
+	    Serial.println(stepSize); 
+	    // Serial.print("Mode: "); 
+	    // Serial.println(mode); 
+	  } 
+	}
+   ```
+   3. Выберите в верхнем левом углу такую плашку и там выберить порт который у вас там будет
+   4. Напиши в поле Arduno Uno и у вас будет выбор какую плату выбрать нажимаете с тектом "Arduino Uno"
+   5. Потом нажмите кнопку загрузить код!! если не работает то значит вы написали не правильно!! все перепроверте!
+   6. Потом как все загрузили проверьте код и запустите робота, если все работает с примером в Третем способе то все отлично :))
+   7. Потом подключите синий провод USB стороной и подключите его в синий USB разьем на Orange PI
